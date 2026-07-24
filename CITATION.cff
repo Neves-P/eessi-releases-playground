@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+title: CI Test
+version: 1.0.0
+license: GPL-2.0-only
+type: software
+abstract: This tests a new CI action
+message: If you use this record, please cite it as below.
+authors:
+- given-names: Jane
+  family-names: Doe
+  affiliation: Somewhere University
+- given-names: John
+  family-names: Nada
+  affiliation: USC
+- given-names: Frank
+  family-names: Armitage
+  affiliation: UCLA
+keywords:
+- sunglasses
+- carpenter
