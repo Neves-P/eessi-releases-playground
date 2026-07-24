@@ -1,0 +1,22 @@
+{
+  "title": "CI Test",
+  "upload_type": "software",
+  "description": "This tests a new CI action",
+  "creators": [
+    {
+      "name": "Doe, Jane",
+      "affiliation": "Somewhere University"
+    },
+    {
+      "name": "Nada, John",
+      "affiliation": "UCLA"
+    },
+    {
+      "name": "Armitage, Frank",
+      "affiliation": "UCLA"
+    }
+  ],
+  "access_right": "open",
+  "license": "GPL-2.0-only",
+  "language": "eng"
+}

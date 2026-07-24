@@ -1,0 +1,47 @@
+name: Update CITATION.cff
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  update-citation:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyyaml cffconvert
+
+    - name: Run script to update CITATION.cff
+      run: python src/create_cff_from_zenodojson.py
+
+    - name: Commit and push changes
+      env:
+        GIT_USER_NAME: ${{ github.actor }}
+        GIT_USER_EMAIL: ${{ github.actor }}@users.noreply.github.com
+        GITHUB_TOKEN: ${{ secrets.ACTIONS_PR_TOKEN }}
+      run: |
+        git config --global user.name "$GIT_USER_NAME"
+        git config --global user.email "$GIT_USER_EMAIL"
+        git checkout -b update-citation-$(date +%s)
+        git add CITATION.cff
+        git commit -m 'Update CITATION.cff from .zenodo.json'
+        git push origin update-citation-$(date +%s)
+
+    - name: Create Pull Request
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACTIONS_PR_TOKEN }}
+      run: |
+        gh pr create --base main --head update-citation-$(date +%s) --title 'Update CITATION.cff' --body 'Automated PR to update CITATION.cff from .zenodo.json'
