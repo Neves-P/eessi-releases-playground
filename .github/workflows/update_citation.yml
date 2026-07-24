@@ -27,21 +27,26 @@ jobs:
     - name: Run script to update CITATION.cff
       run: python src/create_cff_from_zenodojson.py
 
+    - name: Set branch name
+      id: set_branch_name
+      run: echo "BRANCH_NAME=update-citation-$(date +%s)" >> $GITHUB_ENV
+
     - name: Commit and push changes
       env:
         GIT_USER_NAME: ${{ github.actor }}
         GIT_USER_EMAIL: ${{ github.actor }}@users.noreply.github.com
         GITHUB_TOKEN: ${{ secrets.ACTIONS_PR_TOKEN }}
+
       run: |
         git config --global user.name "$GIT_USER_NAME"
         git config --global user.email "$GIT_USER_EMAIL"
         git checkout -b update-citation-$(date +%s)
         git add CITATION.cff
         git commit -m 'Update CITATION.cff from .zenodo.json'
-        git push origin update-citation-$(date +%s)
+        git checkout -b update-citation-$(date +%s)
 
     - name: Create Pull Request
       env:
         GITHUB_TOKEN: ${{ secrets.ACTIONS_PR_TOKEN }}
       run: |
-        gh pr create --base main --head update-citation-$(date +%s) --title 'Update CITATION.cff' --body 'Automated PR to update CITATION.cff from .zenodo.json'
+        gh pr create --base main --head ${{ env.BRANCH_NAME }} --title 'Update CITATION.cff' --body 'Automated PR to update CITATION.cff from .zenodo.json'
