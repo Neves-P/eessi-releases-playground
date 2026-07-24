@@ -14,8 +14,12 @@
     {
       "name": "Armitage, Frank",
       "affiliation": "UCLA"
-    }
+    },
   ],
+    "keywords": [
+      "sunglasses",
+      "carpenter"
+    ],
   "access_right": "open",
   "license": "GPL-2.0-only",
   "language": "eng"
