@@ -45,7 +45,7 @@ def convert_zenodo_to_cff(zenodo_json_path, cff_path):
             author["affiliation"] = creator["affiliation"]
 
         if creator.get("orcid"):
-            if not creator["orcid"].startswith("http://orcid.org/"):
+            if not creator["orcid"].startswith("https://orcid.org/"):
                 author["orcid"] = f"https://orcid.org/{creator['orcid']}"
             else:
                 author["orcid"] = creator["orcid"]
