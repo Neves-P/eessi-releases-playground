@@ -1,7 +1,7 @@
 {
   "title": "CI Test",
   "upload_type": "software",
-  "description": "This tests two new CI actions",
+  "description": "This tests two new CI actions, and now they work!",
   "creators": [
     {
       "name": "Doe, Jane",
