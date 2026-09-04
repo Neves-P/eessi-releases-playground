@@ -93,12 +93,11 @@ class TestGetGithubRelease(unittest.TestCase):
         mock_gh.return_value = {
             "tagName": TAG,
             "name": "EESSI PoC release",
-            "publishedAt": (
-                "2026-09-04T12:40:00Z"
-            ),
+            "publishedAt": "2026-09-04T12:40:00Z",
             "url": RELEASE_URL,
             "isDraft": False,
             "isPrerelease": False,
+            "isImmutable": True,
         }
 
         mock_resolve_commit.return_value = COMMIT
@@ -115,12 +114,11 @@ class TestGetGithubRelease(unittest.TestCase):
                     repository=REPOSITORY,
                     tag=TAG,
                     name="EESSI PoC release",
-                    published_at=(
-                        "2026-09-04T12:40:00Z"
-                    ),
+                    published_at="2026-09-04T12:40:00Z",
                     url=RELEASE_URL,
                 ),
                 commit=COMMIT,
+                is_immutable=True,
             ),
         )
 
@@ -139,12 +137,11 @@ class TestGetGithubRelease(unittest.TestCase):
         mock_gh.return_value = {
             "tagName": TAG,
             "name": "",
-            "publishedAt": (
-                "2026-09-04T12:40:00Z"
-            ),
+            "publishedAt": "2026-09-04T12:40:00Z",
             "url": RELEASE_URL,
             "isDraft": False,
             "isPrerelease": False,
+            "isImmutable": True,
         }
 
         mock_resolve_commit.return_value = COMMIT
@@ -281,18 +278,17 @@ class TestGetGithubRelease(unittest.TestCase):
 
 class TestGitHubReleaseSnapshot(unittest.TestCase):
 
-    def test_snapshot_is_immutable(self):
+    def test_snapshot_dataclass_is_frozen(self):
         snapshot = GitHubReleaseSnapshot(
             release=GitHubRelease(
                 repository=REPOSITORY,
                 tag=TAG,
                 name=TAG,
-                published_at=(
-                    "2026-09-04T12:40:00Z"
-                ),
+                published_at="2026-09-04T12:40:00Z",
                 url=RELEASE_URL,
             ),
             commit=COMMIT,
+            is_immutable=True,
         )
 
         with self.assertRaises(
@@ -300,6 +296,31 @@ class TestGitHubReleaseSnapshot(unittest.TestCase):
         ):
             snapshot.commit = "something-else"
 
+    @patch("src.github_release.resolve_commit")
+    @patch("src.github_release.run_gh_json")
+    def test_reports_release_immutability(
+        self,
+        mock_gh,
+        mock_resolve_commit,
+    ):
+        mock_gh.return_value = {
+            "tagName": TAG,
+            "name": TAG,
+            "publishedAt": "2026-09-04T12:40:00Z",
+            "url": RELEASE_URL,
+            "isDraft": False,
+            "isPrerelease": False,
+            "isImmutable": True,
+        }
+
+        mock_resolve_commit.return_value = COMMIT
+
+        result = get_github_release(
+            REPOSITORY,
+            TAG,
+        )
+
+        self.assertTrue(result.is_immutable)
 
 if __name__ == "__main__":
     unittest.main()

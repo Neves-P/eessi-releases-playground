@@ -24,6 +24,7 @@ class GitHubReleaseSnapshot:
 
     release: GitHubRelease
     commit: str
+    is_immutable: bool
 
 
 def resolve_commit(
@@ -72,7 +73,7 @@ def get_github_release(
         "--json",
         (
             "tagName,name,publishedAt,url,"
-            "isDraft,isPrerelease"
+            "isDraft,isPrerelease,isImmutable"
         ),
     )
 
@@ -114,6 +115,14 @@ def get_github_release(
             f"GitHub release {repository}:{tag} has no URL"
         )
 
+    is_immutable = payload.get("isImmutable")
+
+    if not isinstance(is_immutable, bool):
+        raise GitHubReleaseError(
+            f"GitHub release {repository}:{tag} "
+            "has no valid immutability status"
+        )
+
     name = payload.get("name")
 
     if not isinstance(name, str) or not name:
@@ -133,6 +142,7 @@ def get_github_release(
             repository,
             tag,
         ),
+        is_immutable=is_immutable,
     )
 
 
