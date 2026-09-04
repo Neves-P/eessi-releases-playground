@@ -94,7 +94,7 @@ github_repos:
                 encoding="utf-8",
             )
 
-            with self.assertRaises(ValueError):
+            with self.assertRaises(TypeError):
                 load_config(path)
 
     def test_rejects_missing_github_repos(self):
@@ -106,7 +106,7 @@ github_repos:
                 encoding="utf-8",
             )
 
-            with self.assertRaises(ValueError):
+            with self.assertRaises(TypeError):
                 load_config(path)
 
 
