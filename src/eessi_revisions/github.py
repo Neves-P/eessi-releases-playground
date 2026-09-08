@@ -23,6 +23,7 @@ def run_gh(*args: str) -> str:
         ["gh", *args],
         capture_output=True,
         text=True,
+        check=True
     )
 
     if result.returncode != 0:

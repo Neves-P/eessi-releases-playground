@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
@@ -160,7 +160,8 @@ def main() -> None:
     config = load_config()
 
     # Use one timestamp for the complete collector run.
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+
 
     for repo_url in config["github_repos"]:
         repository = repository_from_url(repo_url)
