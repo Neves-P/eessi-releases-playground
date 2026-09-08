@@ -12,7 +12,6 @@ from eessi_revisions.zenodo_lookup import (
     wait_for_github_release,
 )
 
-
 REPOSITORY = "Neves-P/software-layer"
 TAG = "eessi-2026.09-poc.1"
 RELEASE_URL = (

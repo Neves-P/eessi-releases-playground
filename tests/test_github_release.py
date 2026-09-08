@@ -10,7 +10,6 @@ from eessi_revisions.github_release import (
     resolve_commit,
 )
 
-
 REPOSITORY = "Neves-P/software-layer"
 TAG = "eessi-2026.09-poc.1"
 

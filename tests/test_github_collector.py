@@ -16,7 +16,6 @@ from eessi_revisions.github_collector import (
     write_yaml,
 )
 
-
 REPOSITORY = "Neves-P/software-layer"
 REPO_URL = "https://github.com/Neves-P/software-layer"
 

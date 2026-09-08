@@ -6,7 +6,6 @@ from typing import Optional
 
 import requests
 
-
 SANDBOX_API_URL = "https://sandbox.zenodo.org/api"
 PRODUCTION_API_URL = "https://zenodo.org/api"
 

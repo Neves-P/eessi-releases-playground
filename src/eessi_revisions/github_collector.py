@@ -5,7 +5,6 @@ import yaml
 
 from .github import GitHubError, GitHubRelease, run_gh_json
 
-
 CONFIG_PATH = Path("config/config.yaml")
 PR_METADATA_DIR = Path("data/pr_metadata")
 RELEASE_METADATA_DIR = Path("data/release_metadata")
