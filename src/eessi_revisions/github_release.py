@@ -1,13 +1,9 @@
-from dataclasses import asdict, dataclass
 import argparse
 import json
+from dataclasses import asdict, dataclass
 from urllib.parse import quote
 
-from src.github import (
-    GitHubError,
-    GitHubRelease,
-    run_gh_json,
-)
+from .github import GitHubError, GitHubRelease, run_gh_json
 
 
 class GitHubReleaseError(GitHubError):

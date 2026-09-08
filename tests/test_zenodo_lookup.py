@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from src.zenodo_lookup import (
+from eessi_revisions.zenodo_lookup import (
     ZenodoAmbiguousMatch,
     ZenodoLookupError,
     ZenodoLookupTimeout,
@@ -66,7 +66,7 @@ class TestGithubReleaseUrl(unittest.TestCase):
 
 class TestFindGithubRelease(unittest.TestCase):
 
-    @patch("src.zenodo_lookup.requests.get")
+    @patch("eessi_revisions.zenodo_lookup.requests.get")
     def test_finds_matching_record(self, mock_get):
         mock_get.return_value = make_response(
             [make_record()]
@@ -95,7 +95,7 @@ class TestFindGithubRelease(unittest.TestCase):
             RELEASE_URL,
         )
 
-    @patch("src.zenodo_lookup.requests.get")
+    @patch("eessi_revisions.zenodo_lookup.requests.get")
     def test_uses_exact_related_identifier(self, mock_get):
         other_record = make_record(
             record_id=123,
@@ -122,7 +122,7 @@ class TestFindGithubRelease(unittest.TestCase):
 
         self.assertEqual(record.record_id, 598123)
 
-    @patch("src.zenodo_lookup.requests.get")
+    @patch("eessi_revisions.zenodo_lookup.requests.get")
     def test_raises_if_no_record_exists(self, mock_get):
         mock_get.return_value = make_response([])
 
@@ -132,7 +132,7 @@ class TestFindGithubRelease(unittest.TestCase):
                 TAG,
             )
 
-    @patch("src.zenodo_lookup.requests.get")
+    @patch("eessi_revisions.zenodo_lookup.requests.get")
     def test_raises_if_search_result_does_not_match_exact_url(
         self,
         mock_get,
@@ -154,7 +154,7 @@ class TestFindGithubRelease(unittest.TestCase):
                 TAG,
             )
 
-    @patch("src.zenodo_lookup.requests.get")
+    @patch("eessi_revisions.zenodo_lookup.requests.get")
     def test_raises_on_ambiguous_match(self, mock_get):
         mock_get.return_value = make_response(
             [
@@ -172,7 +172,7 @@ class TestFindGithubRelease(unittest.TestCase):
                 TAG,
             )
 
-    @patch("src.zenodo_lookup.requests.get")
+    @patch("eessi_revisions.zenodo_lookup.requests.get")
     def test_raises_if_record_has_no_doi(self, mock_get):
         record = make_record()
         record.pop("doi")
@@ -187,7 +187,7 @@ class TestFindGithubRelease(unittest.TestCase):
                 TAG,
             )
 
-    @patch("src.zenodo_lookup.requests.get")
+    @patch("eessi_revisions.zenodo_lookup.requests.get")
     def test_queries_sandbox_by_default(self, mock_get):
         mock_get.return_value = make_response(
             [make_record()]
@@ -216,7 +216,7 @@ class TestFindGithubRelease(unittest.TestCase):
             "true",
         )
 
-    @patch("src.zenodo_lookup.requests.get")
+    @patch("eessi_revisions.zenodo_lookup.requests.get")
     def test_can_query_production(self, mock_get):
         mock_get.return_value = make_response(
             [make_record()]
@@ -237,7 +237,7 @@ class TestFindGithubRelease(unittest.TestCase):
 
 class TestWaitForGithubRelease(unittest.TestCase):
 
-    @patch("src.zenodo_lookup.find_github_release")
+    @patch("eessi_revisions.zenodo_lookup.find_github_release")
     def test_returns_immediately_if_record_exists(self, mock_find):
         expected = ZenodoRecord(
             record_id=598123,
@@ -262,8 +262,8 @@ class TestWaitForGithubRelease(unittest.TestCase):
             sandbox=True,
         )
 
-    @patch("src.zenodo_lookup.time.sleep")
-    @patch("src.zenodo_lookup.find_github_release")
+    @patch("eessi_revisions.zenodo_lookup.time.sleep")
+    @patch("eessi_revisions.zenodo_lookup.find_github_release")
     def test_retries_not_found(
         self,
         mock_find,
@@ -294,9 +294,9 @@ class TestWaitForGithubRelease(unittest.TestCase):
         self.assertEqual(mock_find.call_count, 3)
         self.assertEqual(mock_sleep.call_count, 2)
 
-    @patch("src.zenodo_lookup.time.sleep")
-    @patch("src.zenodo_lookup.time.monotonic")
-    @patch("src.zenodo_lookup.find_github_release")
+    @patch("eessi_revisions.zenodo_lookup.time.sleep")
+    @patch("eessi_revisions.zenodo_lookup.time.monotonic")
+    @patch("eessi_revisions.zenodo_lookup.find_github_release")
     def test_times_out(
         self,
         mock_find,
@@ -320,7 +320,7 @@ class TestWaitForGithubRelease(unittest.TestCase):
 
         mock_sleep.assert_not_called()
 
-    @patch("src.zenodo_lookup.find_github_release")
+    @patch("eessi_revisions.zenodo_lookup.find_github_release")
     def test_does_not_retry_ambiguous_match(self, mock_find):
         mock_find.side_effect = ZenodoAmbiguousMatch(
             "multiple records"
@@ -334,7 +334,7 @@ class TestWaitForGithubRelease(unittest.TestCase):
 
         mock_find.assert_called_once()
 
-    @patch("src.zenodo_lookup.find_github_release")
+    @patch("eessi_revisions.zenodo_lookup.find_github_release")
     def test_does_not_retry_other_lookup_errors(self, mock_find):
         mock_find.side_effect = ZenodoLookupError(
             "bad response"

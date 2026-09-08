@@ -3,7 +3,7 @@ from pathlib import Path
 
 import yaml
 
-from src.github import GitHubError, GitHubRelease, run_gh_json
+from .github import GitHubError, GitHubRelease, run_gh_json
 
 
 CONFIG_PATH = Path("config/config.yaml")

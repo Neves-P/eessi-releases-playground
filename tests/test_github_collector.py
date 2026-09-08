@@ -1,12 +1,12 @@
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import call, patch
+from unittest.mock import patch
 
 import yaml
 
-from src.github import GitHubError, GitHubRelease
-from src.github_collector import (
+from eessi_revisions.github import GitHubError, GitHubRelease
+from eessi_revisions.github_collector import (
     collect_github_pr_metadata,
     collect_github_releases,
     load_config,
@@ -113,7 +113,7 @@ github_repos:
 class TestCollectGithubPrMetadata(unittest.TestCase):
 
     @patch(
-        "src.github_collector.run_gh_json"
+        "eessi_revisions.github_collector.run_gh_json"
     )
     def test_collects_pull_requests(self, mock_gh):
         mock_gh.return_value = [
@@ -192,7 +192,7 @@ class TestCollectGithubPrMetadata(unittest.TestCase):
         )
 
     @patch(
-        "src.github_collector.run_gh_json"
+        "eessi_revisions.github_collector.run_gh_json"
     )
     def test_rejects_unexpected_pr_response(
         self,
@@ -211,7 +211,7 @@ class TestCollectGithubPrMetadata(unittest.TestCase):
 class TestCollectGithubReleases(unittest.TestCase):
 
     @patch(
-        "src.github_collector.run_gh_json"
+        "eessi_revisions.github_collector.run_gh_json"
     )
     def test_collects_releases(self, mock_gh):
         mock_gh.return_value = [
@@ -272,7 +272,7 @@ class TestCollectGithubReleases(unittest.TestCase):
         )
 
     @patch(
-        "src.github_collector.run_gh_json"
+        "eessi_revisions.github_collector.run_gh_json"
     )
     def test_rejects_unexpected_release_response(
         self,
@@ -354,10 +354,10 @@ class TestWriteYaml(unittest.TestCase):
 
 class TestMain(unittest.TestCase):
 
-    @patch("src.github_collector.write_yaml")
-    @patch("src.github_collector.collect_github_releases")
-    @patch("src.github_collector.collect_github_pr_metadata")
-    @patch("src.github_collector.load_config")
+    @patch("eessi_revisions.github_collector.write_yaml")
+    @patch("eessi_revisions.github_collector.collect_github_releases")
+    @patch("eessi_revisions.github_collector.collect_github_pr_metadata")
+    @patch("eessi_revisions.github_collector.load_config")
     def test_collects_and_writes_both_metadata_types(
         self,
         mock_load_config,

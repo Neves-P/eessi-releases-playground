@@ -59,12 +59,15 @@ def convert_zenodo_to_cff(zenodo_json_path, cff_path):
     # Validate the CFF file using the cffconvert command-line tool
     subprocess.run(['cffconvert', '--validate', '-i', cff_path], check=True)
 
-if __name__ == '__main__':
-    # Get the root of the repository
-    repo_root = os.getenv('GITHUB_WORKSPACE', '..')
+def main():
+    """Generate and validate CITATION.cff from .zenodo.json."""
 
-    # Construct the paths
-    zenodo_json_path = os.path.join(repo_root, '.zenodo.json')
-    cff_path = os.path.join(repo_root, 'CITATION.cff')
+    repo_root = os.getenv("GITHUB_WORKSPACE", ".")
+    zenodo_json_path = os.path.join(repo_root, ".zenodo.json")
+    cff_path = os.path.join(repo_root, "CITATION.cff")
 
     convert_zenodo_to_cff(zenodo_json_path, cff_path)
+
+
+if __name__ == "__main__":
+    main()

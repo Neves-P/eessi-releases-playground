@@ -1,7 +1,8 @@
-from dataclasses import asdict, dataclass
 import argparse
 import json
 import time
+from dataclasses import asdict, dataclass
+from typing import Optional
 
 import requests
 
@@ -30,8 +31,8 @@ class ZenodoRecord:
 
     record_id: int
     doi: str
-    concept_doi: str | None
-    version: str | None
+    concept_doi: Optional[str]
+    version: Optional[str]
     github_release_url: str
 
 
@@ -75,7 +76,7 @@ def _related_identifiers(record: dict) -> list[str]:
     ]
 
 
-def _get_doi(record: dict) -> str | None:
+def _get_doi(record: dict) -> Optional[str]:
     """Extract a version-specific DOI from a Zenodo record."""
 
     if record.get("doi"):
@@ -89,7 +90,7 @@ def _get_doi(record: dict) -> str | None:
     )
 
 
-def _get_concept_doi(record: dict) -> str | None:
+def _get_concept_doi(record: dict) -> Optional[str]:
     """Extract the concept DOI from a Zenodo record."""
 
     if record.get("conceptdoi"):

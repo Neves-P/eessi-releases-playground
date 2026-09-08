@@ -1,9 +1,9 @@
 import json
 import subprocess
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
-from src.github import (
+from eessi_revisions.github import (
     GitHubError,
     GitHubRelease,
     run_gh,
@@ -26,12 +26,14 @@ class TestGitHubRelease(unittest.TestCase):
         )
 
         with self.assertRaises(AttributeError):
-            release.tag = "something-else"
+            release.tag = (  # pyright: ignore[reportAttributeAccessIssue]
+                "something-else"
+            )
 
 
 class TestRunGh(unittest.TestCase):
 
-    @patch("src.github.subprocess.run")
+    @patch("eessi_revisions.github.subprocess.run")
     def test_runs_gh_and_returns_stdout(self, mock_run):
         mock_run.return_value = subprocess.CompletedProcess(
             args=["gh", "version"],
@@ -53,7 +55,7 @@ class TestRunGh(unittest.TestCase):
             text=True,
         )
 
-    @patch("src.github.subprocess.run")
+    @patch("eessi_revisions.github.subprocess.run")
     def test_passes_all_arguments_to_gh(self, mock_run):
         mock_run.return_value = subprocess.CompletedProcess(
             args=[],
@@ -81,7 +83,7 @@ class TestRunGh(unittest.TestCase):
             text=True,
         )
 
-    @patch("src.github.subprocess.run")
+    @patch("eessi_revisions.github.subprocess.run")
     def test_raises_on_nonzero_exit(self, mock_run):
         mock_run.return_value = subprocess.CompletedProcess(
             args=[
@@ -107,7 +109,7 @@ class TestRunGh(unittest.TestCase):
             str(context.exception),
         )
 
-    @patch("src.github.subprocess.run")
+    @patch("eessi_revisions.github.subprocess.run")
     def test_error_contains_command(self, mock_run):
         mock_run.return_value = subprocess.CompletedProcess(
             args=[
@@ -134,7 +136,7 @@ class TestRunGh(unittest.TestCase):
 
 class TestRunGhJson(unittest.TestCase):
 
-    @patch("src.github.run_gh")
+    @patch("eessi_revisions.github.run_gh")
     def test_parses_json_object(self, mock_run_gh):
         mock_run_gh.return_value = json.dumps(
             {
@@ -155,7 +157,7 @@ class TestRunGhJson(unittest.TestCase):
             },
         )
 
-    @patch("src.github.run_gh")
+    @patch("eessi_revisions.github.run_gh")
     def test_parses_json_list(self, mock_run_gh):
         mock_run_gh.return_value = json.dumps(
             [
@@ -179,7 +181,7 @@ class TestRunGhJson(unittest.TestCase):
             "v2.0.0",
         )
 
-    @patch("src.github.run_gh")
+    @patch("eessi_revisions.github.run_gh")
     def test_raises_on_invalid_json(self, mock_run_gh):
         mock_run_gh.return_value = "this is not json"
 

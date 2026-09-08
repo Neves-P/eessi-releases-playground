@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 
-from src.github import GitHubRelease
-from src.github_release import (
+from eessi_revisions.github import GitHubRelease
+from eessi_revisions.github_release import (
     GitHubReleaseError,
     GitHubReleaseNotPublished,
     GitHubReleaseSnapshot,
@@ -28,7 +28,7 @@ RELEASE_URL = (
 
 class TestResolveCommit(unittest.TestCase):
 
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_resolves_tag_to_commit(self, mock_gh):
         mock_gh.return_value = {
             "sha": COMMIT,
@@ -53,7 +53,7 @@ class TestResolveCommit(unittest.TestCase):
             ),
         )
 
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_rejects_missing_sha(self, mock_gh):
         mock_gh.return_value = {}
 
@@ -65,7 +65,7 @@ class TestResolveCommit(unittest.TestCase):
                 TAG,
             )
 
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_rejects_non_mapping_response(
         self,
         mock_gh,
@@ -83,8 +83,8 @@ class TestResolveCommit(unittest.TestCase):
 
 class TestGetGithubRelease(unittest.TestCase):
 
-    @patch("src.github_release.resolve_commit")
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.resolve_commit")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_returns_release_snapshot(
         self,
         mock_gh,
@@ -127,8 +127,8 @@ class TestGetGithubRelease(unittest.TestCase):
             TAG,
         )
 
-    @patch("src.github_release.resolve_commit")
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.resolve_commit")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_empty_name_falls_back_to_tag(
         self,
         mock_gh,
@@ -156,7 +156,7 @@ class TestGetGithubRelease(unittest.TestCase):
             TAG,
         )
 
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_rejects_draft(self, mock_gh):
         mock_gh.return_value = {
             "tagName": TAG,
@@ -175,7 +175,7 @@ class TestGetGithubRelease(unittest.TestCase):
                 TAG,
             )
 
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_rejects_prerelease(self, mock_gh):
         mock_gh.return_value = {
             "tagName": TAG,
@@ -196,7 +196,7 @@ class TestGetGithubRelease(unittest.TestCase):
                 TAG,
             )
 
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_rejects_missing_publication_time(
         self,
         mock_gh,
@@ -218,7 +218,7 @@ class TestGetGithubRelease(unittest.TestCase):
                 TAG,
             )
 
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_rejects_wrong_tag(self, mock_gh):
         mock_gh.return_value = {
             "tagName": "something-else",
@@ -239,7 +239,7 @@ class TestGetGithubRelease(unittest.TestCase):
                 TAG,
             )
 
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_rejects_missing_url(self, mock_gh):
         mock_gh.return_value = {
             "tagName": TAG,
@@ -260,7 +260,7 @@ class TestGetGithubRelease(unittest.TestCase):
                 TAG,
             )
 
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_rejects_non_mapping_response(
         self,
         mock_gh,
@@ -294,10 +294,12 @@ class TestGitHubReleaseSnapshot(unittest.TestCase):
         with self.assertRaises(
             AttributeError
         ):
-            snapshot.commit = "something-else"
+            snapshot.commit = (  # pyright: ignore[reportAttributeAccessIssue]
+                "something-else"
+            )
 
-    @patch("src.github_release.resolve_commit")
-    @patch("src.github_release.run_gh_json")
+    @patch("eessi_revisions.github_release.resolve_commit")
+    @patch("eessi_revisions.github_release.run_gh_json")
     def test_reports_release_immutability(
         self,
         mock_gh,
