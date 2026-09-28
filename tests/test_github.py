@@ -53,6 +53,7 @@ class TestRunGh(unittest.TestCase):
             ["gh", "version"],
             capture_output=True,
             text=True,
+            check=False,
         )
 
     @patch("eessi_revisions.github.subprocess.run")
@@ -81,6 +82,7 @@ class TestRunGh(unittest.TestCase):
             ],
             capture_output=True,
             text=True,
+            check=False,
         )
 
     @patch("eessi_revisions.github.subprocess.run")
