@@ -26,7 +26,6 @@ dev = [
 ]
 
 [project.scripts]
-eessi-github-collector = "eessi_revisions.github_collector:main"
 eessi-github-release = "eessi_revisions.github_release:main"
 eessi-zenodo-lookup = "eessi_revisions.zenodo_lookup:main"
 eessi-create-cff = "eessi_revisions.citation:main"

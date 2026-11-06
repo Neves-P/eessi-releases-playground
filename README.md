@@ -27,7 +27,6 @@ python -m unittest discover -s tests -v
 
 Installing the project provides these commands:
 
-- `eessi-github-collector`
 - `eessi-github-release`
 - `eessi-zenodo-lookup`
 - `eessi-create-cff`
