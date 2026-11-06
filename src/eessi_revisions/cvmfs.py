@@ -83,11 +83,22 @@ def _parse_decimal_field(
     return parsed
 
 
-def parse_cvmfs_tag_output(
+@dataclass(frozen=True)
+class CvmfsTagInspection:
+    """Parsed metadata from one machine-readable CVMFS tag inspection."""
+
+    snapshot: CvmfsSnapshot
+    catalog_size_bytes: int
+    snapshot_timestamp: int
+    branch: str
+
+
+
+def parse_cvmfs_tag_inspection(
     repository: str,
     snapshot: str,
     output: str,
-) -> CvmfsSnapshot:
+) -> CvmfsTagInspection:
     """Parse machine-readable output from ``cvmfs_server tag -i -x``.
 
     The command itself is intentionally not run here. The caller supplies
@@ -122,9 +133,9 @@ def parse_cvmfs_tag_output(
 
     fields = lines[0].split()
 
-    if len(fields) != 5:
+    if len(fields) != 6:
         raise CvmfsTagOutputError(
-            "CVMFS tag output must contain exactly five fields"
+            "CVMFS tag output must contain exactly six fields"
         )
 
     (
@@ -133,6 +144,7 @@ def parse_cvmfs_tag_output(
         catalog_size_text,
         revision_text,
         timestamp_text,
+        branch,
     ) = fields
 
     if returned_snapshot != snapshot:
@@ -147,7 +159,7 @@ def parse_cvmfs_tag_output(
             "hexadecimal characters"
         )
 
-    _parse_decimal_field(
+    catalog_size_bytes = _parse_decimal_field(
         "catalog size",
         catalog_size_text,
         minimum=0,
@@ -157,15 +169,34 @@ def parse_cvmfs_tag_output(
         revision_text,
         minimum=1,
     )
-    _parse_decimal_field(
+    snapshot_timestamp = _parse_decimal_field(
         "timestamp",
         timestamp_text,
         minimum=1,
     )
 
-    return CvmfsSnapshot(
-        repository=repository,
-        snapshot=snapshot,
-        revision=revision,
-        root_catalog_hash=root_catalog_hash,
+    return CvmfsTagInspection(
+        snapshot=CvmfsSnapshot(
+            repository=repository,
+            snapshot=snapshot,
+            revision=revision,
+            root_catalog_hash=root_catalog_hash,
+        ),
+        catalog_size_bytes=catalog_size_bytes,
+        snapshot_timestamp=snapshot_timestamp,
+        branch=branch,
     )
+
+
+def parse_cvmfs_tag_output(
+    repository: str,
+    snapshot: str,
+    output: str,
+) -> CvmfsSnapshot:
+    """Return snapshot identity from machine-readable CVMFS tag output."""
+
+    return parse_cvmfs_tag_inspection(
+        repository,
+        snapshot,
+        output,
+    ).snapshot

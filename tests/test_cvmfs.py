@@ -5,6 +5,7 @@ from eessi_revisions.cvmfs import (
     CvmfsSnapshotMismatch,
     CvmfsSnapshotValidationError,
     CvmfsTagOutputError,
+    parse_cvmfs_tag_inspection,
     parse_cvmfs_tag_output,
 )
 
@@ -14,7 +15,7 @@ ROOT_CATALOG_HASH = "2c1a337d7e0960b63cff163cb633904d7ea19744"
 TAG_OUTPUT = (
     "software.eessi.io-rev0006 "
     "2c1a337d7e0960b63cff163cb633904d7ea19744 "
-    "26624 30536 1793657696"
+    "26624 30536 1793657696 (default)"
 )
 
 
@@ -25,10 +26,11 @@ def make_tag_output(
     catalog_size: str = "26624",
     revision: str = "30536",
     timestamp: str = "1793657696",
+    branch: str = "(default)",
 ) -> str:
     return (
         f"{snapshot} {root_catalog_hash} {catalog_size} "
-        f"{revision} {timestamp}"
+        f"{revision} {timestamp} {branch}"
     )
 
 
@@ -122,6 +124,17 @@ class TestParseCvmfsTagOutput(unittest.TestCase):
                 root_catalog_hash=ROOT_CATALOG_HASH,
             ),
         )
+
+    def test_preserves_source_metadata(self):
+        result = parse_cvmfs_tag_inspection(
+            REPOSITORY,
+            SNAPSHOT,
+            TAG_OUTPUT,
+        )
+
+        self.assertEqual(result.catalog_size_bytes, 26624)
+        self.assertEqual(result.snapshot_timestamp, 1793657696)
+        self.assertEqual(result.branch, "(default)")
 
     def test_accepts_surrounding_blank_lines(self):
         result = parse_cvmfs_tag_output(
