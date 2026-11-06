@@ -26,6 +26,7 @@ dev = [
 ]
 
 [project.scripts]
+eessi-cvmfs-provenance = "eessi_revisions.cvmfs_provenance:main"
 eessi-github-release = "eessi_revisions.github_release:main"
 eessi-zenodo-lookup = "eessi_revisions.zenodo_lookup:main"
 eessi-create-cff = "eessi_revisions.citation:main"
