@@ -369,19 +369,25 @@ def _reject_duplicate_fields(
     return mapping
 
 
+def _require_json_text(value: object) -> str:
+    if not isinstance(value, str):
+        raise CvmfsProvenanceDocumentError(
+            "CVMFS provenance JSON must be a string"
+        )
+
+    return value
+
+
 def deserialize_cvmfs_provenance(
     text: str,
 ) -> CvmfsProvenanceDocument:
     """Deserialize and strictly validate CVMFS provenance JSON."""
 
-    if not isinstance(text, str):
-        raise CvmfsProvenanceDocumentError(
-            "CVMFS provenance JSON must be a string"
-        )
+    json_text = _require_json_text(text)
 
     try:
         payload = json.loads(
-            text,
+            json_text,
             object_pairs_hook=_reject_duplicate_fields,
         )
     except json.JSONDecodeError as exc:

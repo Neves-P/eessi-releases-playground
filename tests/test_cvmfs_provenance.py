@@ -185,6 +185,13 @@ class TestLoadCvmfsProvenance(unittest.TestCase):
         ):
             deserialize_cvmfs_provenance("{")
 
+    def test_rejects_non_string_json_input(self):
+        with self.assertRaisesRegex(
+            CvmfsProvenanceDocumentError,
+            "must be a string",
+        ):
+            deserialize_cvmfs_provenance(cast(str, b"{}"))
+
     def test_rejects_non_object_document(self):
         for value in ("[]", '"value"', "null"):
             with self.subTest(value=value), self.assertRaisesRegex(
