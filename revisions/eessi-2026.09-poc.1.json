@@ -1,0 +1,30 @@
+{
+  "components": [
+    {
+      "commit": "ba82ccf30517a2a22d801225875b0a4c791ba19b",
+      "concept_doi": "10.5072/zenodo.598122",
+      "doi": "10.5072/zenodo.598123",
+      "github_release_url": "https://github.com/Neves-P/software-layer/releases/tag/eessi-2026.09-poc.1",
+      "is_immutable": false,
+      "repository": "Neves-P/software-layer",
+      "role": "software_layer",
+      "tag": "eessi-2026.09-poc.1"
+    }
+  ],
+  "cvmfs": {
+    "repository": "software.eessi.io",
+    "revision": 30536,
+    "root_catalog_hash": "2c1a337d7e0960b63cff163cb633904d7ea19744",
+    "schema_version": 1,
+    "snapshot": "software.eessi.io-rev0006",
+    "source": {
+      "branch": "(default)",
+      "catalog_size_bytes": 26624,
+      "cvmfs_version": "2.14.1",
+      "snapshot_timestamp": 1793657696,
+      "type": "cvmfs_server_tag"
+    }
+  },
+  "revision": "eessi-2026.09-poc.1",
+  "schema_version": 1
+}
