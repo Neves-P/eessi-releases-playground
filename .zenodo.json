@@ -1,25 +1,31 @@
 {
-  "title": "CI Test",
+  "title": "EESSI - European Environment for Scientific Software Installations",
   "upload_type": "software",
-  "description": "This tests two new CI actions, and now they work!",
+  "description": "This software tests Zenodo's GitHub integration for MultiXscale",
   "creators": [
-    {
-      "name": "Doe, Jane",
-      "affiliation": "Somewhere University"
-    },
     {
       "name": "Nada, John",
       "affiliation": "USC"
+    },
+    {
+      "name": "Thompson, Holly",
+      "affiliation": "UC Berkeley"
     },
     {
       "name": "Armitage, Frank",
       "affiliation": "UCLA"
     }
   ],
-    "keywords": [
-      "sunglasses",
-      "carpenter"
-    ],
+  "keywords": [
+    "sunglasses",
+    "carpenter"
+  ],
+  "communities": [
+    {"identifier": "test-eessi-community"}
+  ],
+  "grants": [
+    {"id": "00k4n6c32::101093169"}
+  ],
   "access_right": "open",
   "license": "GPL-2.0-only",
   "language": "eng"
