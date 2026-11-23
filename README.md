@@ -33,6 +33,16 @@ Installing the project provides these commands:
 - `eessi-zenodo-lookup`
 - `eessi-create-cff`
 
+Generate and validate a citation file from Zenodo metadata with:
+
+```bash
+eessi-create-cff --input metadata/.zenodo.json --output CITATION.cff
+```
+
+Without arguments, `eessi-create-cff` reads `.zenodo.json` and writes
+`CITATION.cff` in `GITHUB_WORKSPACE`, or in the current directory when that
+environment variable is not set.
+
 ## Manual CVMFS provenance handoff
 
 An authorized operator first captures the machine-readable output on the

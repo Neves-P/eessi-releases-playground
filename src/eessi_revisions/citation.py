@@ -1,6 +1,10 @@
+import argparse
 import json
 import os
 import subprocess
+from collections.abc import Sequence
+from pathlib import Path
+from typing import Optional
 
 import yaml
 
@@ -59,14 +63,28 @@ def convert_zenodo_to_cff(zenodo_json_path, cff_path):
     # Validate the CFF file using the cffconvert command-line tool
     subprocess.run(['cffconvert', '--validate', '-i', cff_path], check=True)
 
-def main():
+def main(argv: Optional[Sequence[str]] = None) -> None:
     """Generate and validate CITATION.cff from .zenodo.json."""
 
-    repo_root = os.getenv("GITHUB_WORKSPACE", ".")
-    zenodo_json_path = os.path.join(repo_root, ".zenodo.json")
-    cff_path = os.path.join(repo_root, "CITATION.cff")
+    repo_root = Path(os.getenv("GITHUB_WORKSPACE", "."))
+    parser = argparse.ArgumentParser(
+        description="Generate and validate CITATION.cff from Zenodo metadata."
+    )
+    parser.add_argument(
+        "--input",
+        type=Path,
+        default=repo_root / ".zenodo.json",
+        help="Zenodo metadata JSON file (default: %(default)s)",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=repo_root / "CITATION.cff",
+        help="CITATION.cff file to create (default: %(default)s)",
+    )
 
-    convert_zenodo_to_cff(zenodo_json_path, cff_path)
+    args = parser.parse_args(argv)
+    convert_zenodo_to_cff(args.input, args.output)
 
 
 if __name__ == "__main__":
